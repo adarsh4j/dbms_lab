@@ -239,3 +239,46 @@ mysql> SELECT authors.name, COUNT(*) AS 'number of books' FROM authors, books WH
 +-----------------+-----------------+
 4 rows in set (0.00 sec)
 
+
+
+
+
+
+
+select * from authors;
++-----------+-----------------+---------------------------------+----------+--------+
+| author_id | name            | email                           | phone_no | status |
++-----------+-----------------+---------------------------------+----------+--------+
+|         1 | Richard Dawkins | mediacontact@richarddawkins.net |   716636 |      1 |
+|         2 | Roger Penrose   | rouse@maths.ox.ac.uk            |   233576 |      1 |
+|         3 | akhill          | akhill@gmail.com                |   432332 |      3 |
+|         4 | amal            | amal@gmail.com                  | 34445555 |      6 |
+|         8 | achu            | achu@gmail.com                  | 44656565 |      8 |
++-----------+-----------------+---------------------------------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from book_author;
++---------+-----------+
+| book_id | author_id |
++---------+-----------+
+|       1 |         1 |
+|       2 |         1 |
+|       3 |         1 |
+|       4 |         2 |
+|       5 |         2 |
++---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT authors.name, COUNT(*) AS 'number of books' FROM authors, book-author WHERE authors.author_id=book_author.author_id GROUP BY publishers.name;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-author WHERE authors.author_id=book_author.author_id GROUP BY publishers.name' at line 1
+mysql> SELECT authors.name, COUNT(*) AS 'number of books' FROM authors, book_author WHERE authors.author_id=book_author.author_id GROUP BY publishers.name;
+ERROR 1054 (42S22): Unknown column 'publishers.name' in 'group statement'
+mysql> SELECT authors.name, COUNT(*) AS 'number of books' FROM authors, book_author WHERE authors.author_id=book_author.author_id GROUP BY authors.name;
++-----------------+-----------------+
+| name            | number of books |
++-----------------+-----------------+
+| Richard Dawkins |               3 |
+| Roger Penrose   |               2 |
++-----------------+-----------------+
+2 rows in set (0.00 sec)
+
