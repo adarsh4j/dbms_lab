@@ -282,3 +282,201 @@ mysql> SELECT authors.name, COUNT(*) AS 'number of books' FROM authors, book_aut
 +-----------------+-----------------+
 2 rows in set (0.00 sec)
 
+
+
+//d
+
+ desc book_issue;
++-------------------------+-------------+------+-----+---------+-------+
+| Field                   | Type        | Null | Key | Default | Extra |
++-------------------------+-------------+------+-----+---------+-------+
+| issue_id                | int(11)     | NO   | PRI | NULL    |       |
+| data_of_issue           | date        | YES  |     | NULL    |       |
+| book_id                 | int(11)     | YES  | MUL | NULL    |       |
+| member_id               | int(11)     | YES  | MUL | NULL    |       |
+| expected_date_of_return | date        | YES  |     | NULL    |       |
+| status                  | varchar(12) | YES  |     | NULL    |       |
++-------------------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into book_issue values('1','2020-09-22','1','1','2021-09-22',"yes");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book_issue values('2','2020-09-24','2','2','2021-09-24',"yes");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book_issue values('3','2020-09-28','3','3','2021-09-28',"yes");
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from book_issue;
++----------+---------------+---------+-----------+-------------------------+--------+
+| issue_id | data_of_issue | book_id | member_id | expected_date_of_return | status |
++----------+---------------+---------+-----------+-------------------------+--------+
+|        1 | 2020-09-22    |       1 |         1 | 2021-09-22              | yes    |
+|        2 | 2020-09-24    |       2 |         2 | 2021-09-24              | yes    |
+|        3 | 2020-09-28    |       3 |         3 | 2021-09-28              | yes    |
++----------+---------------+---------+-----------+-------------------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT title FROM book,book_issue where book_issue.status="yes" and book_issue.book_id=book.book_id;
++-------+
+| title |
++-------+
+| Hope  |
+| java  |
+| C     |
++-------+
+3 rows in set (0.00 sec)
+
+
+//e
+
+select * from member;
++-----------+-------+-------------+---------+-----------------+--------------+--------+
+| member_id | name  | branch_code | roll_no | email           | data_of_join | status |
++-----------+-------+-------------+---------+-----------------+--------------+--------+
+|       501 | Ganga |          63 |      20 | ganga@gmail.com | 2021-05-01   | yes    |
++-----------+-------+-------------+---------+-----------------+--------------+--------+
+1 row in set (0.02 sec)
+
+mysql> select * from book;
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+| book_ID | title | language_id | MRP  | publisher_id | published_data | volume | status |
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+|       1 | Hope  |          25 |   75 |          101 | 2020-09-19     |      6 | yes    |
+|       2 | java  |          22 |   33 |           32 | 2020-08-20     |      6 | yes    |
+|       3 | C     |          33 |  555 |          212 | 2020-07-20     |      6 | yes    |
+|       4 | C++   |          21 |   25 |          111 | 2020-09-12     |      6 | YES    |
++---------+-------+-------------+------+--------------+----------------+--------+--------+
+4 rows in set (0.01 sec)
+
+mysql> insert into member values('1',"Hamston",'22','12',"hamston@gmail.com",'2021-01-12',"yes");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into member values('2',"Hacker",'12','22',"hackere@gmail.com",'2021-01-12',"yes");
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from member;                                                                  +-----------+---------+-------------+---------+-------------------+--------------+--------+
+| member_id | name    | branch_code | roll_no | email             | data_of_join | status |
++-----------+---------+-------------+---------+-------------------+--------------+--------+
+|         1 | Hamston |          22 |      12 | hamston@gmail.com | 2021-01-12   | yes    |
+|         2 | Hacker  |          12 |      22 | hackere@gmail.com | 2021-01-12   | yes    |
+|       501 | Ganga   |          63 |      20 | ganga@gmail.com   | 2021-05-01   | yes    |
++-----------+---------+-------------+---------+-------------------+--------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from language;
++---------+-----------+-------+
+| lang_id | name      | price |
++---------+-----------+-------+
+|       1 | english   |  NULL |
+|       2 | sanskrit  |  NULL |
+|      25 | english   |    75 |
+|      26 | malayalam |   100 |
++---------+-----------+-------+
+4 rows in set (0.00 sec)
+
+mysql> update language set name="malayalam" where lang_id=25;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from language;
++---------+-----------+-------+
+| lang_id | name      | price |
++---------+-----------+-------+
+|       1 | english   |  NULL |
+|       2 | sanskrit  |  NULL |
+|      25 | malayalam |    75 |
+|      26 | malayalam |   100 |
++---------+-----------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select member.name from member,book_issue,book,language where member.member_id=book_issue.member_id and book_issue.book_id=book.book_id and book.language_id=language.language_id and language.name="malayalam";
+ERROR 1054 (42S22): Unknown column 'language.language_id' in 'where clause'
+mysql> select member.name from member,book_issue,book,language where member.member_id=book_issue.member_id and book_issue.book_id=book.book_id and book.language_id=language.lang_id and language.name="malayalam";
++---------+
+| name    |
++---------+
+| Hamston |
++---------+
+
+
+//f
+
+desc book_return;
++-----------------------+---------+------+-----+---------+-------+
+| Field                 | Type    | Null | Key | Default | Extra |
++-----------------------+---------+------+-----+---------+-------+
+| issue_id              | int(11) | YES  | MUL | NULL    |       |
+| actual_date_of_return | date    | YES  |     | NULL    |       |
+| late_days             | int(11) | YES  |     | NULL    |       |
+| late_fee              | int(11) | YES  |     | NULL    |       |
++-----------------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into book_return values('2','2020-04-12','3','12');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book_return values('5','2020-04-15','22','14');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into book_return values('1','2021-03-13','20','11');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from book_return;
++----------+-----------------------+-----------+----------+
+| issue_id | actual_date_of_return | late_days | late_fee |
++----------+-----------------------+-----------+----------+
+|        2 | 2020-04-12            |         3 |       12 |
+|        5 | 2020-04-15            |        22 |       14 |
+|        1 | 2021-03-13            |        20 |       11 |
++----------+-----------------------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select sum(late_fee) as current_month from book_return where month(actual_date_of_return)=month('2020-04-22');
++---------------+
+| current_month |
++---------------+
+|            26 |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(late_fee) as Total_fine from book_return where month(actual_date_of_return)=month('2020-04-22');
++------------+
+| Total_fine |
++------------+
+|         26 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(late_fee) as Total_fine from book_return where quarter(actual_date_of_return)=month('2020-04-22');
++------------+
+| Total_fine |
++------------+
+|       NULL |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(late_fee) as Total_fine from book_return where quarter(actual_date_of_return)=quarter('2020-04-22');
++------------+
+| Total_fine |
++------------+
+|         26 |
++------------+
+1 row in set (0.00 sec)
+
+
+
+//g
+
+
+ select member.name from member,book_issue,book_return where book_issue.expected_date_of_return<book_return.actual_date_of_return or book_issue.status="yes" group by member.name;
++---------+
+| name    |
++---------+
+| Ganga   |
+| Hacker  |
+| Hamston |
++---------+
+3 rows in set (0.00 sec)
+
