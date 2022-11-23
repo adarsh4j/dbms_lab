@@ -480,3 +480,36 @@ mysql> select sum(late_fee) as Total_fine from book_return where quarter(actual_
 +---------+
 3 rows in set (0.00 sec)
 
+
+//i
+
+ select * from member;
++-----------+---------+-------------+---------+-------------------+--------------+--------+
+| member_id | name    | branch_code | roll_no | email             | data_of_join | status |
++-----------+---------+-------------+---------+-------------------+--------------+--------+
+|         1 | Hamston |          22 |      12 | hamston@gmail.com | 2021-01-12   | yes    |
+|         2 | Hacker  |          12 |      22 | hackere@gmail.com | 2021-01-12   | yes    |
+|       501 | Ganga   |          63 |      20 | ganga@gmail.com   | 2021-05-01   | yes    |
++-----------+---------+-------------+---------+-------------------+--------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from book_issue;
++----------+---------------+---------+-----------+-------------------------+--------+
+| issue_id | data_of_issue | book_id | member_id | expected_date_of_return | status |
++----------+---------------+---------+-----------+-------------------------+--------+
+|        1 | 2020-09-22    |       1 |         1 | 2021-09-22              | yes    |
+|        2 | 2020-09-24    |       2 |         2 | 2021-09-24              | yes    |
+|        3 | 2020-09-28    |       3 |         3 | 2021-09-28              | yes    |
++----------+---------------+---------+-----------+-------------------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select name from member,member,book_issue where data_of_join>'2021-01-01' and member.member_id not in (select member_id from book_issue)group by member.member_id;
+ERROR 1066 (42000): Not unique table/alias: 'member'
+mysql> select name from member,book_issue where data_of_join>'2021-01-01' and member.member_id not in (select member_id from book_issue)group by member.member_id;
++-------+
+| name  |
++-------+
+| Ganga |
++-------+
+1 row in set (0.00 sec)
+
