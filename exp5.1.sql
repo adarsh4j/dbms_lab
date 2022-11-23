@@ -513,3 +513,12 @@ mysql> select name from member,book_issue where data_of_join>'2021-01-01' and me
 +-------+
 1 row in set (0.00 sec)
 
+
+ select title as book,sum(late_fee) as fee from book,book_return,book_issue where book.book_id=book_issue.book_id and book_issue.expected_date_of_return<book_return.actual_date_of_return group by book.title;
++------+------+
+| book | fee  |
++------+------+
+| Hope |   37 |
+| java |   37 |
++------+------+
+2 rows in set (0.00 sec)
