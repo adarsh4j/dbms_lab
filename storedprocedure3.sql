@@ -108,9 +108,9 @@ mysql> select * from department;
        ----------------------------------------
 
 CREATE A PROCEDURE TO COUNT THE NUMBER OF EMPLOYEES WITH FOLLOWING CONDITION
-SALARY<20000
-SALARY>20000
-SALARY=20000
+SALARY<Given salary
+SALARY>Given salary
+SALARY=Given salary
  
  --------------------------------------------------
 
@@ -183,11 +183,11 @@ mysql> create procedure bonus(in e int)
     -> if(sal<=15000) then
     -> select (0.2*sal);
     -> elseif(sal>15001 and sal<=40000)
-    -> then select(0.15*sal);
+    -> then select(0.15*sal) as Bonus;
     -> elseif(sal>40000and sal<=80000)
-    -> then select(0.1*sal);
+    -> then select(0.1*sal) as Bonus;
     -> elseif(sal>80001)
-    -> then select(0.05*sal);
+    -> then select(0.05*sal) as Bonus;
     -> end if;
     -> end &&
 Query OK, 0 rows affected (0.01 sec)
@@ -195,9 +195,9 @@ Query OK, 0 rows affected (0.01 sec)
 mysql> call bonus(110);
     -> &&
 +-----------+
-| (0.2*sal) |
+|  Bonus    |
 +-----------+
-|    2000.0 |
+|    3000.0 |
 +-----------+
 1 row in set (0.00 sec)
 
