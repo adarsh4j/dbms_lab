@@ -114,19 +114,43 @@ SALARY=20000
  
  --------------------------------------------------
 
-mysql> create procedure salary(in s int)
+mysql> delimiter &&
+mysql> create procedure salary1(in sal int,in p int)
     -> begin
-    -> if s = 1 then
-    -> select count(*) from employee where salary>20000;
-    -> elseif s = 2 then
-    -> select count(*) from employee where salary<20000;
-    -> elseif s = 3 then
-    -> select count(*) from employee where salary=20000;
+    -> if var=1 then
+    -> select count(*) from employee where salary>sal;
+    -> elseif var=2 then
+    -> select count(*) from employee where salary<sal;
+    -> elseif var=3 then
+    -> select count(*) from employee where salary=sal;
     -> end if;
     -> end &&
 Query OK, 0 rows affected (0.02 sec)
 
-mysql> call salary(1);
+
+mysql> call salary2(40000,1);
+    -> &&
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call salary2(40000,2);
+    -> &&
++----------+
+| count(*) |
++----------+
+|        2 |
++----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call salary2(40000,3);
     -> &&
 +----------+
 | count(*) |
@@ -137,25 +161,8 @@ mysql> call salary(1);
 
 Query OK, 0 rows affected (0.00 sec)
 
-mysql> call salary(2);
-    -> &&
-+----------+
-| count(*) |
-+----------+
-|        1 |
-+----------+
-1 row in set (0.00 sec)
+mysql> 
 
-Query OK, 0 rows affected (0.00 sec)
-
-mysql> call salary(3);
-    -> &&
-+----------+
-| count(*) |
-+----------+
-|        1 |
-+----------+
-1 row in set (0.00 sec)
 
 Query OK, 0 rows affected (0.00 sec)
    --------------------------------------------
@@ -173,13 +180,13 @@ mysql> create procedure bonus(in e int)
     -> begin
     -> declare sal int;
     -> select salary from employee where emp_id = e into sal;
-    -> if(sal<=70000) then
+    -> if(sal<=15000) then
     -> select (0.2*sal);
-    -> elseif(sal>70000 and sal<=85000)
+    -> elseif(sal>15001 and sal<=40000)
     -> then select(0.15*sal);
-    -> elseif(sal>85000 and sal<=100000)
+    -> elseif(sal>40000and sal<=80000)
     -> then select(0.1*sal);
-    -> elseif(sal>100000)
+    -> elseif(sal>80001)
     -> then select(0.05*sal);
     -> end if;
     -> end &&
