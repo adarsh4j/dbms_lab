@@ -115,7 +115,7 @@ SALARY=Given salary
  --------------------------------------------------
 
 mysql> delimiter &&
-mysql> create procedure salary1(in sal int,in p int)
+mysql> create procedure salary1(in sal int,in var int)
     -> begin
     -> if var=1 then
     -> select count(*) from employee where salary>sal;
